@@ -58,7 +58,7 @@ public static class DefaultExtension
 
                             // exResponse.Exception = $"{handlerFeature.Error.TargetSite.DeclaringType.FullName}.{new StackTrace(handlerFeature.Error).GetFrame(0).GetMethod().Name}";
                             exResponse.Exception = "test custome exception";
-                            exResponse.Message = handlerFeature.Error.Message;
+                            exResponse.Message = "test custome exception";
                             exResponse.Path = ((ExceptionHandlerFeature)handlerFeature).Path;
                             exResponse.Status = response.StatusCode;
                             
