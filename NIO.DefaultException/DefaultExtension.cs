@@ -56,7 +56,6 @@ public static class DefaultExtension
                             else
                                 response.StatusCode = (Int32)HttpStatusCode.InternalServerError;                                    
 
-                            // exResponse.Exception = $"{handlerFeature.Error.TargetSite.DeclaringType.FullName}.{new StackTrace(handlerFeature.Error).GetFrame(0).GetMethod().Name}";
                             exResponse.Message = $"{handlerFeature.Error.Message} {handlerFeature.Error.TargetSite.DeclaringType.FullName}.{new StackTrace(handlerFeature.Error).GetFrame(0).GetMethod().Name}";
                             exResponse.Path = ((ExceptionHandlerFeature)handlerFeature).Path;
                             exResponse.Status = response.StatusCode;
