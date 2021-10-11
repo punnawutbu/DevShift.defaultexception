@@ -14,6 +14,9 @@ namespace NIO.DefaultException
 
         [JsonProperty("message")]
         public String Message { get; set; }
+        
+        [JsonProperty("stackTrace")]
+        public String StackTrace { get; set; }
 
         [JsonProperty("path")]
         public String Path { get; set; }

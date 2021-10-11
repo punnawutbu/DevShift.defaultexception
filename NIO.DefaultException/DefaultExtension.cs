@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace NIO.DefaultException
 {
@@ -30,7 +31,7 @@ public static class DefaultExtension
             return jObject;
         }
         
-        public static IApplicationBuilder UseDefaultException(this IApplicationBuilder app)
+        public static IApplicationBuilder UseDefaultException(this IApplicationBuilder app, ILogger logger, bool isDev)
         {
             return app.UseExceptionHandler(configure =>
             {
@@ -56,12 +57,16 @@ public static class DefaultExtension
                             else
                                 response.StatusCode = (Int32)HttpStatusCode.InternalServerError;                                    
 
+                            exResponse.StackTrace = handlerFeature.Error.StackTrace.Replace("\n", ".");
                             exResponse.Exception = $"{handlerFeature.Error.TargetSite.DeclaringType.FullName}.{new StackTrace(handlerFeature.Error).GetFrame(0).GetMethod().Name}";
                             exResponse.Message = handlerFeature.Error.Message;
                             exResponse.Path = ((ExceptionHandlerFeature)handlerFeature).Path;
                             exResponse.Status = response.StatusCode;
                             
-                            await response.WriteAsync(JsonConvert.SerializeObject(exResponse)).ConfigureAwait(false);
+                            logger.Error($"{exResponse.Message} {exResponse.StackTrace}");
+                            if(isDev) {
+                                await response.WriteAsync(JsonConvert.SerializeObject(exResponse)).ConfigureAwait(false);
+                            }
                         }
                     }
                 );
